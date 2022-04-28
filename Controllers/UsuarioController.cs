@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using RpgApi.Data;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using RpgApi.Model;
-using RpgApi.Model.Enuns;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using RpgApi.Utils;
-
-
+using RpgApi.Model.Enuns;
 
 namespace RpgApi.Controllers
 {
@@ -61,25 +62,25 @@ namespace RpgApi.Controllers
         {
             try
             {
-                Usuario usuario = await _context.usuarios
+                Usuario usuarios = await _context.usuarios
                    .FirstOrDefaultAsync(x => x.Username.ToLower().Equals(credenciais.Username.ToLower()));
 
-                if (usuario == null)
+                if (usuarios == null)
                 {
                     throw new System.Exception("Usuário não encontrado.");
                 }
                 else if (!Criptografia
-                    .VerificarPasswordHash(credenciais.PasswordString, usuario.PasswordHash, usuario.PasswordSalt))
+                    .VerificarPasswordHash(credenciais.PasswordString, usuarios.PasswordHash, usuarios.PasswordSalt))
                 {
                     throw new System.Exception("Senha incorreta.");
                 }
                 else
                 {
-                    usuario.DataAcesso = System.DateTime.Now;
-                    _context.usuarios.Update(usuario);
+                    usuarios.DataAcesso = System.DateTime.Now;
+                    _context.usuarios.Update(usuarios);
                     await _context.SaveChangesAsync(); 
                     
-                    return Ok(usuario.Id);
+                    return Ok(usuarios.Id);
                 }
             }
             catch (System.Exception ex)
@@ -87,6 +88,40 @@ namespace RpgApi.Controllers
                 return BadRequest(ex.Message); 
             }
         }
+
+
+        [HttpGet ("GetAll")]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+               List<Usuario> lista = await _context.usuarios.ToListAsync();
+                return Ok (lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

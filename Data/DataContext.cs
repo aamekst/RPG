@@ -73,16 +73,7 @@ namespace RpgApi.Data
                 new PersonagemHabilidade() { PersonagemId = 7, HabilidadeId =3 }                               
             );
 
-
-
         
-
-
-
-
-
-
-
 
         }
 
