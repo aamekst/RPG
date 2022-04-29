@@ -3,25 +3,37 @@ using RpgApi.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using RpgApi.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using RpgApi.Utils;
 using RpgApi.Model.Enuns;
+using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace RpgApi.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("[Controller]")]
 
     public class UsuarioController: ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IConfiguration _configuration;
 
-        public UsuarioController(DataContext context)
+        public UsuarioController(DataContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+
         }
 
         private async Task<bool> UsuarioExistente(string username)
@@ -57,6 +69,7 @@ namespace RpgApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("Autenticar")]
         public async Task<IActionResult> AutenticarUsuario(Usuario credenciais)
         {
@@ -80,7 +93,7 @@ namespace RpgApi.Controllers
                     _context.usuarios.Update(usuarios);
                     await _context.SaveChangesAsync(); 
                     
-                    return Ok(usuarios.Id);
+                    return Ok(CriarToken(usuarios));
                 }
             }
             catch (System.Exception ex)
@@ -91,7 +104,8 @@ namespace RpgApi.Controllers
 
 
         [HttpGet ("GetAll")]
-        public async Task<IActionResult> Get()
+        
+        public async Task<IActionResult> GetAll()
         {
             try
             {
@@ -105,7 +119,28 @@ namespace RpgApi.Controllers
         }  
 
 
+           private string CriarToken(Usuario usuario)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                new Claim(ClaimTypes.Name, usuario.Username)
+            };
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(_configuration.GetSection("ConfiguracaoToken:Chave").Value));
 
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
+        }
 
 
 

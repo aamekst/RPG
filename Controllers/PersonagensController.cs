@@ -6,9 +6,15 @@ using RpgApi.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace RpgApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[Controller]")]
     public class PersonagensController: ControllerBase
@@ -38,7 +44,7 @@ namespace RpgApi.Controllers
 
         [HttpGet ("GetAll")]
 
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             try
             {

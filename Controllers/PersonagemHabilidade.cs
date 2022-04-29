@@ -8,6 +8,7 @@ using RpgApi.Model;
 using RpgApi.Utils;
 using RpgApi.Data;
 using System;
+using System.Linq;
 
 namespace RpgApi.Controllers
 {
@@ -89,6 +90,53 @@ namespace RpgApi.Controllers
         }
 
     }
+
+
+      [HttpGet ("GetAll")]
+        
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+               List<Habilidade> Habilidades = new List<Habilidade>();
+               Habilidades = await _context.Habilidades.ToListAsync();
+                return Ok (Habilidades);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }  
+
+
+
+     [HttpGet("personagemId")] //Busca pelo Id
+
+    public async Task<IActionResult> GetHabilidadePersonagem(int personagemid)
+    {
+    
+        try
+        {
+            List<PersonagemHabilidade> phLista = new  List<PersonagemHabilidade> ();
+            phLista = await _context.PersonagemHabilidades
+            .Include(p => p.personagem)
+            .Include(p => p.Habilidade)
+                .Where(p => p.personagem.Id == personagemid).ToListAsync();
+
+         return Ok(phLista);
+
+        }
+        catch (System.Exception ex)
+        { 
+            return BadRequest(ex.Message);
+
+        }
+
+    }
+
+
+
+
 
     
     }
