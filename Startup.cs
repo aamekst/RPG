@@ -84,11 +84,11 @@ namespace RpgApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();    
             app.UseAuthorization();
 
-            app.UseAuthentication();
 
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
