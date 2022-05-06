@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 
 
 
+
 namespace RpgApi.Controllers
 {
     [Authorize]
@@ -143,20 +144,29 @@ namespace RpgApi.Controllers
             }
         }
 
+            
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+               Usuario pRemover = await _context.usuarios
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+                _context.usuarios.Remove(pRemover);
+                int linhasAfetadas = await _context.SaveChangesAsync();
+
+               return Ok(linhasAfetadas);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
-
-
-
-
-
-
-
-
-
-
-
-           private string CriarToken(Usuario usuario)
+        private string CriarToken(Usuario usuario)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -179,22 +189,7 @@ namespace RpgApi.Controllers
             return tokenHandler.WriteToken(token);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      
 
     }
 }

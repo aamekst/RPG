@@ -10,6 +10,9 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+
 
 
 namespace RpgApi.Controllers
@@ -21,26 +24,33 @@ namespace RpgApi.Controllers
     {
         private readonly DataContext _context;
 
-        public PersonagensController(DataContext context)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public PersonagensController(DataContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        [HttpGet("{id}")]
-
-        public async Task<IActionResult> GetSingle(int id) 
+        [HttpGet("{id}")] //Buscar pelo id
+        public async Task<IActionResult> GetSingle(int id)
         {
             try
             {
                 personagem p = await _context.personagens
+                    .Include(ar => ar.Arma)
+                    .Include(us => us.Usuario)
+                    .Include(ph => ph.PersonagemHabilidade)
+                        .ThenInclude(h => h.Habilidade)                    
                     .FirstOrDefaultAsync(pBusca => pBusca.Id == id);
-                return Ok (p);
+
+                return Ok(p);
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-        }  
+        }
 
         [HttpGet ("GetAll")]
 
@@ -66,6 +76,10 @@ namespace RpgApi.Controllers
                {
                    throw new Exception ("Pontos de vida não poder ser maior que 100");
                }
+
+                //int usuarioId = int.Parse(_httpContextAccessor.HttpContext.User.FindFirstOrDefault(ClaimTypes.NameIdentifier));
+                novoPersonagem.Usuario = _context.usuarios.FirstOrDefault(uBusca => uBusca.Id == ObterUsuarioId());
+
                _context.personagens.Update(novoPersonagem);
                int linhasAfetadas = await _context.SaveChangesAsync();
 
@@ -87,6 +101,12 @@ namespace RpgApi.Controllers
                {
                    throw new Exception ("Pontos de vida não poder ser maior que 100");
                }
+
+                //int usuarioId = int.Parse(_httpContextAccessor.HttpContext.User.FirstOrDefault(ClaimTypes.NameIdentifier));
+                
+                
+               novoPersonagem.Usuario = _context.usuarios.FirstOrDefault(uBusca => uBusca.Id == ObterUsuarioId());
+
                await _context.personagens.AddAsync(novoPersonagem);
                await _context.SaveChangesAsync();
 
@@ -140,20 +160,34 @@ namespace RpgApi.Controllers
         }
 
 
+     [HttpGet("GetByUser")]
+
+     public async Task<IActionResult> GetByUserAsync()
+     {
+        try
+        {
+            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            List<personagem> list = await _context.personagens
+                .Where(u => u.Usuario.Id == id).ToListAsync();
+
+                return Ok(list);
+        }
+        catch (System.Exception ex)
+         {
+            return BadRequest(ex.Message);
+
+         }
+     }
+
+        private int ObterUsuarioId()
+        {
+            return int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        }
 
 
 
-
-
-
-
-
-
-
-
-
-        
+    
     }
-
 }
 

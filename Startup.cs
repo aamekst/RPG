@@ -16,7 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt; 
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.AspNetCore.Http;
 using RpgApi.Data; 
 using Microsoft.EntityFrameworkCore;
 using RpgApi.Model;
@@ -39,6 +39,8 @@ namespace RpgApi
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("ConexaoLocal")));  //muda para comnexão somee
            
             services.AddControllers();
+
+            services.AddSingleton<HttpContextAccessor, HttpContextAccessor>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

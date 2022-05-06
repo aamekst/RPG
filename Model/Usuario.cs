@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,6 +29,8 @@ namespace RpgApi.Model.Enuns
         
         public List<personagem> personagens { get; set; } 
         
+        [Required]
 
+        public string Perfil { get; set;}
     }
 }

@@ -76,6 +76,8 @@ namespace RpgApi.Data
                 new Habilidade(){Id=3, Nome="Hipnotizar", Dano=37}
             );
 
+            modelBuilder.Entity<Usuario>().Property(u => u.Perfil).HasDefaultValue("Jogador");
+
             modelBuilder.Entity<PersonagemHabilidade>().HasData
             (                  
                 new PersonagemHabilidade() { PersonagemId = 1, HabilidadeId =1 }, 
