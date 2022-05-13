@@ -17,7 +17,7 @@ using System.Security.Claims;
 
 namespace RpgApi.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Jogador, Admin")]
     [ApiController]
     [Route("[Controller]")]
     public class PersonagensController: ControllerBase
@@ -184,6 +184,36 @@ namespace RpgApi.Controllers
         {
             return int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
+
+        private string ObterPerfilUsuario()
+        {
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+        }
+
+         [HttpGet("GetByPerfil")]
+        public async Task<IActionResult> GetByPerfilAsync()
+        {
+            try
+            {
+                List<personagem> lista = new List<personagem>();
+
+                if(ObterPerfilUsuario() == "Admin")
+                {
+                    lista = await _context.personagens.ToListAsync();
+                }
+                else
+                {
+                    lista = await _context.personagens
+                            .Where(p => p.Usuario.Id == ObterUsuarioId()).ToListAsync();
+                }
+                return Ok(lista);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
 
 

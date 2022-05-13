@@ -1,0 +1,20 @@
+ALTER TABLE [Personagens] ADD [Derrotas] int NOT NULL DEFAULT 0;
+GO
+
+ALTER TABLE [Personagens] ADD [Disputas] int NOT NULL DEFAULT 0;
+GO
+
+ALTER TABLE [Personagens] ADD [Vitorias] int NOT NULL DEFAULT 0;
+GO
+
+CREATE TABLE [Disputas] (
+    [Id] int NOT NULL IDENTITY,
+    [DataDisputa] datetime2 NULL,
+    [AtacanteId] int NOT NULL,
+    [OponenteId] int NOT NULL,
+    [Narracao] nvarchar(max) NULL,
+    CONSTRAINT [PK_Disputas] PRIMARY KEY ([Id])
+);
+
+go
+ALTER TABLE [Usuarios] ADD [Email] nvarchar(max) null;

@@ -23,7 +23,12 @@ namespace RpgApi.Model
 
         public byte[] FotoPersonagem {get; set;}
         
+        public int Disputas { get; set;}
 
+        public int Vitorias { get; set;}
+        
+        public int Derrotas { get; set;}
+        
         [JsonIgnore]
 
         public Usuario Usuario { get; set;}

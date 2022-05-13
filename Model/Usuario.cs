@@ -22,15 +22,15 @@ namespace RpgApi.Model.Enuns
          public string Longitude { get; set; }
 
          public DateTime? DataAcesso{ get; set; }
-    
+         
+         public string Email {get; set;}
              
         [NotMapped]
         public string PasswordString { get; set; } 
         
         public List<personagem> personagens { get; set; } 
         
-        [Required]
-
+       // [Required]
         public string Perfil { get; set;}
-    }
+    } 
 }

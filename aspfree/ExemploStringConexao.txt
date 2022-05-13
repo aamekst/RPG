@@ -1,0 +1,1 @@
+,"ConexaoFreeAspHosting": "server=sql.bsite.net\\MSSQL2016;database=SEU_ID_DB_RPG;User ID=SEU_ID_DB_RPG;Password=SUA_SENHA"

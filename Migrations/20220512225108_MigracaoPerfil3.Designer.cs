@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RpgApi.Data;
 
 namespace RpgApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220512225108_MigracaoPerfil3")]
+    partial class MigracaoPerfil3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,30 +68,6 @@ namespace RpgApi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RpgApi.Model.Disputa", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AtacanteId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DataDisputa")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Narracao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OponenteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Disputas");
-                });
-
             modelBuilder.Entity("RpgApi.Model.Enuns.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -99,9 +77,6 @@ namespace RpgApi.Migrations
 
                     b.Property<DateTime?>("DataAcesso")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Foto")
                         .HasColumnType("varbinary(max)");
@@ -119,6 +94,7 @@ namespace RpgApi.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Perfil")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("Jogador");
@@ -134,8 +110,8 @@ namespace RpgApi.Migrations
                         new
                         {
                             Id = 1,
-                            PasswordHash = new byte[] { 210, 255, 190, 70, 233, 190, 207, 36, 138, 38, 23, 169, 50, 76, 37, 135, 124, 28, 230, 222, 142, 13, 237, 150, 130, 235, 131, 245, 42, 254, 240, 4, 125, 126, 157, 67, 201, 169, 255, 40, 253, 106, 185, 156, 238, 26, 236, 4, 110, 117, 205, 135, 11, 45, 25, 94, 250, 198, 123, 199, 236, 246, 13, 179 },
-                            PasswordSalt = new byte[] { 53, 220, 46, 184, 183, 208, 49, 135, 92, 27, 39, 11, 148, 51, 165, 142, 47, 69, 111, 53, 225, 99, 107, 121, 184, 186, 250, 45, 55, 218, 27, 189, 140, 118, 134, 202, 234, 170, 105, 6, 107, 157, 47, 197, 31, 64, 134, 177, 203, 130, 55, 100, 37, 253, 137, 88, 187, 2, 239, 209, 71, 77, 39, 150, 124, 3, 204, 79, 244, 150, 241, 171, 26, 24, 223, 146, 228, 63, 76, 162, 254, 77, 203, 129, 33, 53, 100, 158, 124, 6, 60, 222, 109, 13, 226, 18, 86, 139, 178, 24, 201, 112, 91, 10, 164, 253, 143, 108, 2, 153, 108, 70, 105, 159, 144, 194, 181, 163, 35, 72, 50, 247, 243, 113, 255, 109, 108, 88 },
+                            PasswordHash = new byte[] { 119, 213, 19, 188, 113, 183, 167, 239, 33, 50, 18, 51, 220, 195, 238, 167, 117, 128, 218, 38, 190, 248, 39, 110, 92, 208, 146, 51, 185, 77, 150, 243, 36, 160, 180, 228, 113, 223, 179, 67, 243, 47, 207, 108, 250, 255, 187, 77, 143, 106, 229, 147, 75, 187, 142, 246, 131, 46, 77, 147, 237, 29, 33, 121 },
+                            PasswordSalt = new byte[] { 224, 143, 23, 247, 132, 86, 6, 118, 20, 37, 127, 201, 1, 64, 201, 24, 48, 34, 124, 86, 178, 134, 222, 197, 185, 206, 68, 147, 21, 14, 115, 5, 247, 40, 100, 207, 198, 255, 116, 8, 21, 179, 94, 198, 46, 132, 32, 202, 42, 194, 56, 76, 215, 191, 61, 233, 243, 246, 254, 143, 116, 225, 72, 199, 42, 100, 66, 253, 5, 41, 202, 22, 219, 82, 221, 88, 39, 140, 40, 219, 117, 139, 47, 226, 69, 194, 125, 40, 21, 223, 188, 169, 36, 100, 54, 19, 254, 45, 174, 123, 2, 52, 5, 1, 235, 180, 130, 164, 211, 254, 83, 21, 16, 214, 81, 152, 30, 178, 144, 132, 244, 78, 60, 139, 114, 235, 210, 60 },
                             Username = "UsuarioAdmin"
                         });
                 });
@@ -253,12 +229,6 @@ namespace RpgApi.Migrations
                     b.Property<int>("Defesa")
                         .HasColumnType("int");
 
-                    b.Property<int>("Derrotas")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Disputas")
-                        .HasColumnType("int");
-
                     b.Property<int>("Forca")
                         .HasColumnType("int");
 
@@ -277,9 +247,6 @@ namespace RpgApi.Migrations
                     b.Property<int?>("UsuarioId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Vitorias")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UsuarioId");
@@ -292,91 +259,70 @@ namespace RpgApi.Migrations
                             Id = 1,
                             Classe = 1,
                             Defesa = 23,
-                            Derrotas = 0,
-                            Disputas = 0,
                             Forca = 17,
                             Inteligencia = 33,
                             Nome = "Nathaniel",
-                            Pontosvida = 100,
-                            Vitorias = 0
+                            Pontosvida = 100
                         },
                         new
                         {
                             Id = 2,
                             Classe = 1,
                             Defesa = 25,
-                            Derrotas = 0,
-                            Disputas = 0,
                             Forca = 15,
                             Inteligencia = 30,
                             Nome = "Maddy",
-                            Pontosvida = 100,
-                            Vitorias = 0
+                            Pontosvida = 100
                         },
                         new
                         {
                             Id = 3,
                             Classe = 3,
                             Defesa = 21,
-                            Derrotas = 0,
-                            Disputas = 0,
                             Forca = 18,
                             Inteligencia = 35,
                             Nome = "Cinzeiro",
-                            Pontosvida = 100,
-                            Vitorias = 0
+                            Pontosvida = 100
                         },
                         new
                         {
                             Id = 4,
                             Classe = 2,
                             Defesa = 18,
-                            Derrotas = 0,
-                            Disputas = 0,
                             Forca = 18,
                             Inteligencia = 37,
                             Nome = "Cass",
-                            Pontosvida = 100,
-                            Vitorias = 0
+                            Pontosvida = 100
                         },
                         new
                         {
                             Id = 5,
                             Classe = 1,
                             Defesa = 17,
-                            Derrotas = 0,
-                            Disputas = 0,
                             Forca = 20,
                             Inteligencia = 31,
                             Nome = "Rue",
-                            Pontosvida = 100,
-                            Vitorias = 0
+                            Pontosvida = 100
                         },
                         new
                         {
                             Id = 6,
                             Classe = 3,
                             Defesa = 13,
-                            Derrotas = 0,
-                            Disputas = 0,
                             Forca = 21,
                             Inteligencia = 34,
                             Nome = "Lexi",
-                            Pontosvida = 100,
-                            Vitorias = 0
+                            Pontosvida = 100
                         },
                         new
                         {
                             Id = 7,
                             Classe = 2,
                             Defesa = 11,
-                            Derrotas = 0,
-                            Disputas = 0,
                             Forca = 25,
                             Inteligencia = 35,
                             Nome = "Fez",
-                            Pontosvida = 100,
-                            Vitorias = 0
+                            Pontosvida = 100
                         });
                 });
 

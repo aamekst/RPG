@@ -40,7 +40,8 @@ namespace RpgApi
            
             services.AddControllers();
 
-            services.AddSingleton<HttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -54,10 +55,6 @@ namespace RpgApi
                     ValidateAudience = false
                 };
             });
-
-
-
-
 
 
             services.AddSwaggerGen(c =>

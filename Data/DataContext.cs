@@ -14,6 +14,7 @@ namespace RpgApi.Data
 
         public DbSet<personagem> personagens { get; set;}
         public DbSet<Arma> Armas { get; set; }
+        public DbSet<Disputa> Disputas { get; set; }
         public DbSet<Usuario> usuarios { get; set; }
         public DbSet<Habilidade> Habilidades { get; set; }
         public DbSet<PersonagemHabilidade> PersonagemHabilidades { get; set; }
@@ -69,14 +70,7 @@ namespace RpgApi.Data
             modelBuilder.Entity<PersonagemHabilidade>()
                 .HasKey(ph => new {ph.PersonagemId, ph.HabilidadeId });
 
-            modelBuilder.Entity<Habilidade>().HasData
-            (
-                new Habilidade(){Id=1, Nome="Adormecer", Dano=39},
-                new Habilidade(){Id=2, Nome="Congelar", Dano=41},
-                new Habilidade(){Id=3, Nome="Hipnotizar", Dano=37}
-            );
-
-            modelBuilder.Entity<Usuario>().Property(u => u.Perfil).HasDefaultValue("Jogador");
+    
 
             modelBuilder.Entity<PersonagemHabilidade>().HasData
             (                  
@@ -91,6 +85,14 @@ namespace RpgApi.Data
                 new PersonagemHabilidade() { PersonagemId = 7, HabilidadeId =3 }                               
             );
 
+            modelBuilder.Entity<Habilidade>().HasData
+            (
+                new Habilidade(){Id=1, Nome="Adormecer", Dano=39},
+                new Habilidade(){Id=2, Nome="Congelar", Dano=41},
+                new Habilidade(){Id=3, Nome="Hipnotizar", Dano=37}
+            );
+
+            modelBuilder.Entity<Usuario>().Property(u => u.Perfil).HasDefaultValue("Jogador");
         
 
         }
