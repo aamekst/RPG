@@ -42,22 +42,16 @@ namespace RpgApi.Data
                 user.PasswordHash = hash;
                 user.PasswordSalt = salt;
 
-                Usuario user2 = new Usuario();
+               /* Usuario user2 = new Usuario();
                 Criptografia.CriarPasswordHash("564790", out byte[] hash2, out byte[] salt2);
                 user2.Id = 2;
                 user2.Username = "Usuariomaster";
                 user2.PasswordString = string.Empty;
                 user2.PasswordHash = hash2;
-                user2.PasswordSalt = salt2;
+                user2.PasswordSalt = salt2;*/
 
-                Usuario user3 = new Usuario();
-                Criptografia.CriarPasswordHash("564790", out byte[] hash3, out byte[] salt3);
-                user3.Id = 2;
-                user3.Username = "ana";
-                user3.PasswordString = string.Empty;
-                user3.PasswordHash = hash3;
-                user3.PasswordSalt = salt3;
-
+          
+        
                modelBuilder.Entity<Usuario>().HasData(user);
 
                modelBuilder.Entity<Arma>().HasData

@@ -24,13 +24,14 @@ namespace RpgApi.Model.Enuns
          public DateTime? DataAcesso{ get; set; }
          
          public string Email {get; set;}
-             
+            
+        public string Perfil { get; set;}
         [NotMapped]
         public string PasswordString { get; set; } 
         
         public List<personagem> personagens { get; set; } 
         
        // [Required]
-        public string Perfil { get; set;}
+       
     } 
 }
