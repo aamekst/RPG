@@ -26,7 +26,7 @@ namespace RpgApi.Controllers
     [ApiController]
     [Route("[Controller]")]
 
-    public class UsuarioController: ControllerBase
+    public class UsuarioController : ControllerBase
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
@@ -94,34 +94,34 @@ namespace RpgApi.Controllers
                 {
                     usuarios.DataAcesso = System.DateTime.Now;
                     _context.usuarios.Update(usuarios);
-                    await _context.SaveChangesAsync(); 
-                    
+                    await _context.SaveChangesAsync();
+
                     return Ok(CriarToken(usuarios));
                 }
             }
             catch (System.Exception ex)
-            { 
-                return BadRequest(ex.Message); 
+            {
+                return BadRequest(ex.Message);
             }
         }
 
 
-        [HttpGet ("GetAll")]
-        
+        [HttpGet("GetAll")]
+
         public async Task<IActionResult> GetAll()
         {
             try
             {
-               List<Usuario> lista = await _context.usuarios.ToListAsync();
-                return Ok (lista);
+                List<Usuario> lista = await _context.usuarios.ToListAsync();
+                return Ok(lista);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-        }  
+        }
 
-      [HttpPut("AlterarSenha")]
+        [HttpPut("AlterarSenha")]
         public async Task<IActionResult> AlterarSenhaUsuario(Usuario credenciais)
         {
             try
@@ -146,19 +146,19 @@ namespace RpgApi.Controllers
             }
         }
 
-            
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-               Usuario pRemover = await _context.usuarios
-                .FirstOrDefaultAsync(p => p.Id == id);
+                Usuario pRemover = await _context.usuarios
+                 .FirstOrDefaultAsync(p => p.Id == id);
 
                 _context.usuarios.Remove(pRemover);
                 int linhasAfetadas = await _context.SaveChangesAsync();
 
-               return Ok(linhasAfetadas);
+                return Ok(linhasAfetadas);
 
             }
             catch (Exception ex)
@@ -192,7 +192,133 @@ namespace RpgApi.Controllers
             return tokenHandler.WriteToken(token);
         }
 
-      
+        [HttpGet("{usuarioId}")]
+        public async Task<IActionResult> GetUsuario(int usuarioId)
+        {
+            try
+            {
+                //List exigirá o using System.Collections.GenericUsuariousuario 
+                Usuario usuario = await _context.usuarios//Busca o usuário no banco através do Id              
+                .FirstOrDefaultAsync(x => x.Id == usuarioId);
+
+                return Ok(usuario);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetByLogin/{login}")]
+        public async Task<IActionResult> GetUsuario(string login)
+        {
+            try
+            { //List exigirá o using System.Collections.Generic 
+                Usuario usuario = await _context.usuarios//Busca o usuário no banco através do login             
+                      .FirstOrDefaultAsync(x => x.Username.ToLower() == login.ToLower());
+                return Ok(usuario);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("AtualizarLocalizacao")]
+        public async Task<IActionResult> AtualizarLocalizacao(Usuario u)
+        {
+            try
+            {
+                Usuario usuario = await _context.usuarios//Busca o usuário no banco através do Id                  
+                .FirstOrDefaultAsync(x => x.Id == u.Id);
+                usuario.Latitude = u.Latitude;
+                usuario.Longitude = u.Longitude;
+                var attach = _context.Attach(usuario); attach.Property(x => x.Id).IsModified = false;
+                attach.Property(x => x.Latitude).IsModified = true;
+                attach.Property(x => x.Longitude).IsModified = true;
+                int linhasAfetadas = await _context.SaveChangesAsync(); //Confirma a alteração no bancoreturnOk(linhasAfetadas); //Retorna as linhas afetadas (Geralmente sempre 1 linha msm)            } catch (System.Exceptionex)             
+                return Ok(linhasAfetadas);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("AtualizarEmail")]
+        public async Task<IActionResult> AtualizarEmail(Usuario u)
+        {
+            try
+            {
+                Usuario usuario = await _context.usuarios//Busca o usuário no banco através do Id                   
+                 .FirstOrDefaultAsync(x => x.Id == u.Id);
+                usuario.Email = u.Email;
+                var attach = _context.Attach(usuario);
+                attach.Property(x => x.Id).IsModified = false;
+                attach.Property(x => x.Email).IsModified = true;
+                int linhasAfetadas = await _context.SaveChangesAsync(); //Confirma a alteração no banco
+                return Ok(linhasAfetadas); //Retorna as linhas afetadas (Geralmente sempre 1 linha msm)            
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("AtualizarFoto")]
+        public async Task<IActionResult> AtualizarFoto(Usuario u)
+        {
+            try
+            {
+                Usuario usuario = await _context.usuarios
+            .FirstOrDefaultAsync(x => x.Id == u.Id); usuario.Foto = u.Foto;
+                var attach = _context.Attach(usuario);
+                attach.Property(x => x.Id).IsModified = false;
+                attach.Property(x => x.Foto).IsModified = true;
+                int linhasAfetadas = await _context.SaveChangesAsync();
+                return Ok(linhasAfetadas);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }
